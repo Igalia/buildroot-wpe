@@ -1,0 +1,112 @@
+config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+	bool
+	# ARM needs BLX, so v5t+, BE completely untested so disabled
+	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
+	default y if BR2_aarch64
+	default y if BR2_i386 || BR2_x86_64
+	# Disabled on MIPS big endian due to sigbus
+	default y if BR2_mipsel || BR2_mips64el
+	# Disabled on PowerPC pending runtime testing
+	# Disabled on SuperH because of segfault
+	depends on BR2_USE_MMU # libglib2
+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+
+comment "wpewebkit needs a glibc toolchain w/ C++, OpenGL backend, gcc >= 5, host gcc >= 4.8"
+	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+	depends on !BR2_INSTALL_LIBSTDCPP || \
+		!BR2_TOOLCHAIN_USES_GLIBC || \
+		!BR2_HOST_GCC_AT_LEAST_4_8 || \
+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
+		!(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
+	depends on BR2_USE_MMU
+
+config BR2_PACKAGE_WPEWEBKIT
+	bool "wpewebkit"
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+	depends on BR2_TOOLCHAIN_USES_GLIBC
+	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL # libepoxy
+	select BR2_PACKAGE_CAIRO
+	select BR2_PACKAGE_CAIRO_PNG
+	select BR2_PACKAGE_LIBEPOXY
+	select BR2_PACKAGE_LIBGCRYPT
+	select BR2_PACKAGE_HARFBUZZ
+	select BR2_PACKAGE_ICU
+	select BR2_PACKAGE_JPEG
+	select BR2_PACKAGE_LIBPNG
+	select BR2_PACKAGE_LIBSOUP
+	select BR2_PACKAGE_LIBXML2
+	select BR2_PACKAGE_SQLITE
+	select BR2_PACKAGE_WEBP
+	select BR2_PACKAGE_WEBP_DEMUX
+	select BR2_PACKAGE_WPEBACKEND
+	help
+	  WebKit is an open source, standards compliant web browser
+	  engine. The WPE port is specifically aimed towards usage in
+	  embedded devices.
+
+	  http://webplatformforembedded.org/
+
+if BR2_PACKAGE_WPEWEBKIT
+
+config BR2_PACKAGE_WPEWEBKIT_BUILD_JSC
+	bool "build jsc"
+	help
+	  Builds and install the "jsc" interactive JavaScript shell.
+
+config BR2_PACKAGE_WPEWEBKIT_HTTPS
+	bool "HTTPS support"
+	depends on !BR2_STATIC_LIBS # gnutls -> libsoup
+	select BR2_PACKAGE_CA_CERTIFICATES # runtime
+	select BR2_PACKAGE_GLIB_NETWORKING
+	select BR2_PACKAGE_LIBSOUP_SSL
+	help
+	  Enable HTTP protocol support.
+
+comment "wpewebkit https support needs a toolchain w/ dynamic library"
+	depends on BR2_STATIC_LIBS
+
+config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+	bool "multimedia support"
+	select BR2_PACKAGE_GSTREAMER1
+	select BR2_PACKAGE_GST1_PLUGINS_BASE
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+	select BR2_PACKAGE_GST1_PLUGINS_GOOD
+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+	select BR2_PACKAGE_GST1_LIBAV
+	help
+	  This option pulls in all of the required dependencies
+	  to enable multimedia (video/audio) support.
+
+config BR2_PACKAGE_WPEWEBKIT_WEBCRYPTO
+	bool "WebCrypto support"
+	select BR2_PACKAGE_LIBTASN1
+	help
+	  Enable support for the WebCrypto API. This will add libtasn1 as
+	  a dependency.
+
+config BR2_PACKAGE_WPEWEBKIT_WEBDRIVER
+	bool "WebDriver support"
+	help
+	  Enable support for WebDriver. This will build and install the
+	  WebKitWebDriver program in the target.
+
+config BR2_PACKAGE_WPEWEBKIT_XSLT
+	bool "XSLT support"
+	select BR2_PACKAGE_LIBXSLT
+	help
+	  Enable support for XSLT. This adds libxslt2 as a dependecy.
+
+endif

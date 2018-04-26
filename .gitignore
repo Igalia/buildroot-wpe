@@ -1,0 +1,4 @@
+/buildroot-*/
+/buildroot-*.tar.bz2
+output
+local.mk
