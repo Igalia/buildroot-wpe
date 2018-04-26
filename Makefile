@@ -1,4 +1,4 @@
-BR_VERSION := 2017.08.2
+BR_VERSION := 2018.02.2
 BR_BASEDIR := buildroot-$(BR_VERSION)
 BR_TARBALL := $(BR_BASEDIR).tar.bz2
 BR_URL     := https://buildroot.org/downloads/$(BR_TARBALL)

@@ -10,5 +10,5 @@
 +		-exec $(BR2_EXTERNAL_WPE_RPI_PATH)/tools/can-strip '{}' \; \
 +		-print0 | xargs -0r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
  endif
- 
+
  # Valgrind needs ld.so with enough information, so only strip

@@ -32,7 +32,7 @@ index 1071de5132..d16dc482f3 100644
 @@ -64,6 +64,22 @@ This mechanism is best used in conjunction with the +make
  _rsync_, only the modified files are copied), and restart the build
  process of just this package.
- 
+
 +Source trees for big projects often contain hundreds or thousands of
 +files which are not needed for building, but will slow down the process
 +of copying the sources with _rsync_. Optionally, it is possible define
@@ -51,20 +51,19 @@ index 1071de5132..d16dc482f3 100644
 +
  In the example of the +linux+ package above, the developer can then
  make a source code change in +/home/bob/linux+ and then run:
- 
+
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
 index 0e28675fbe..c895afc498 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
 -	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
 +	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
--- 
-2.15.0
+	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+	$(Q)touch $@
 
+--
+2.15.0
