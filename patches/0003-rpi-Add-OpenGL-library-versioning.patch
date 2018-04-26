@@ -72,6 +72,6 @@ index 0000000000..9a22a66d23
 ++include(GNUInstallDirs)
 ++install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink libEGL.so ${DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libEGL.so.1)")
 ++install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink libGLESv2.so ${DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libGLESv2.so.2)")
-+-- 
++--
 +2.13.2
 +
