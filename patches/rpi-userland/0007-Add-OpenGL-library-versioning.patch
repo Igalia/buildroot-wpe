@@ -1,0 +1,41 @@
+From a6abc80168512993f390cfdb40531c50829af6da Mon Sep 17 00:00:00 2001
+From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Fri, 3 Mar 2017 17:28:41 -0500
+Subject: [PATCH] Add OpenGL library versioning
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+Some applications like QtWebEngine dynamically load libraries using
+dlopen. The library name is hardcoded, and it includes the library
+version [1].
+
+This patch creates symlinks for EGL and GLES libraries.
+
+	libEGL.so.1 -> libEGL.so
+	libGLESv2.so.2 -> libGLESv2.so
+
+[1] https://github.com/qt/qtwebengine/blob/v5.9.1/src/core/surface_factory_qt.cpp#L76-L86
+
+Upstream-Status: https://github.com/raspberrypi/userland/pull/379
+Signed-off-by: Gaël PORTAY <gael.portay@savoirfairelinux.com>
+---
+ host_applications/android/apps/vidtex/CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/host_applications/android/apps/vidtex/CMakeLists.txt b/host_applications/android/apps/vidtex/CMakeLists.txt
+index 1f705ef..d68ae5f 100644
+--- a/host_applications/android/apps/vidtex/CMakeLists.txt
++++ b/host_applications/android/apps/vidtex/CMakeLists.txt
+@@ -10,3 +10,8 @@ set (VIDTEX_SOURCES
+    vidtex.c)
+ add_executable(vidtex ${VIDTEX_SOURCES})
+ target_link_libraries(vidtex GLESv2 EGL m bcm_host mmal_core mmal_components mmal_util mmal_vc_client vcos)
++
++set(DESTDIR \$ENV{DESTDIR})
++include(GNUInstallDirs)
++install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink libEGL.so ${DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libEGL.so.1)")
++install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink libGLESv2.so ${DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libGLESv2.so.2)")
+-- 
+2.13.2
+
