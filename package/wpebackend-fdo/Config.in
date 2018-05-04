@@ -1,0 +1,10 @@
+config BR2_PACKAGE_WPEBACKEND_FDO
+	bool "wpebackend-fdo"
+	depends on BR2_PACKAGE_HAS_LIBEGL
+	select BR2_PACKAGE_LIBGLIB2
+	select BR2_PACKAGE_LIBXKBCOMMON
+	select BR2_PACKAGE_WAYLAND
+	select BR2_PACKAGE_WESTON
+	select BR2_PACKAGE_WPEBACKEND
+	help
+	  WPEBackend interface using freedesktop.org APIs
