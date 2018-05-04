@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-WPEWEBKIT_VERSION = 0.20.0
-WPEWEBKIT_SITE = http://people.igalia.com/aperez/files/wpe
+WPEWEBKIT_VERSION = 0.19.0-prerelease1
+WPEWEBKIT_SITE = https://www.wpewebkit.org/releases
 WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
 WPEWEBKIT_INSTALL_STAGING = YES
 WPEWEBKIT_LICENSE = LGPv2.1+, BSD-2-Clause
@@ -16,13 +16,8 @@ WPEWEBKIT_DEPENDENCIES = host-cmake host-ruby host-flex host-bison \
 	host-gperf harfbuzz icu jpeg libegl libepoxy libgcrypt libsoup \
 	libxml2 sqlite webp wpebackend
 WPEWEBKIT_CONF_OPTS = \
-	-DENABLE_API_TESTS=OFF \
-	-DENABLE_GEOLOCATION=OFF \
-	-DENABLE_GTKDOC=OFF \
-	-DENABLE_INTROSPECTION=OFF \
-	-DENABLE_MINIBROWSER=OFF \
-	-DENABLE_SPELLCHECK=OFF \
-	-DPORT=WPE
+	-DPORT=WPE \
+	-DUSE_WOFF2=OFF
 
 # JSC JIT is supported on: i386, x86_64, aarch64 and mips32le target archs.
 # For target arch arm (32) it is only supported on ARMv7 CPUs and ARMv8 CPUs,
@@ -42,13 +37,9 @@ WPEWEBKIT_CONF_OPTS += \
 WPEWEBKIT_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-base \
 	gst1-plugins-good gst1-plugins-bad
 else
-# ENABLE_MEDIA_STREAM has to be explicitly disabled because there is a missing
-# feature dependency in the WPEWebKit CMake files. This can be removed once
-# https://bugs.webkit.org/show_bug.cgi?id=174940 makes it into a release.
 WPEWEBKIT_CONF_OPTS += \
 	-DENABLE_VIDEO=OFF \
-	-DENABLE_WEB_AUDIO=OFF \
-	-DENABLE_MEDIA_STREAM=OFF
+	-DENABLE_WEB_AUDIO=OFF
 endif
 
 ifeq ($(BR2_PACKAGE_WPEWEBKIT_HTTPS),y)

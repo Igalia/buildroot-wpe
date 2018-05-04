@@ -12,12 +12,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
 
-comment "wpewebkit needs a glibc toolchain w/ C++, OpenGL backend, gcc >= 5, host gcc >= 4.8"
+comment "wpewebkit needs a glibc toolchain w/ C++, OpenGL backend, gcc >= 6, host gcc >= 4.8"
 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
 	depends on !BR2_INSTALL_LIBSTDCPP || \
 		!BR2_TOOLCHAIN_USES_GLIBC || \
 		!BR2_HOST_GCC_AT_LEAST_4_8 || \
-		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
+		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
 		!(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
 	depends on BR2_USE_MMU
 
@@ -25,7 +25,7 @@ config BR2_PACKAGE_WPEWEBKIT
 	bool "wpewebkit"
 	depends on BR2_INSTALL_LIBSTDCPP
 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
 	depends on BR2_TOOLCHAIN_USES_GLIBC
 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
 	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL # libepoxy
@@ -43,12 +43,13 @@ config BR2_PACKAGE_WPEWEBKIT
 	select BR2_PACKAGE_WEBP
 	select BR2_PACKAGE_WEBP_DEMUX
 	select BR2_PACKAGE_WPEBACKEND
+	select BR2_PACKAGE_WPEBACKEND_FDO
 	help
 	  WebKit is an open source, standards compliant web browser
 	  engine. The WPE port is specifically aimed towards usage in
 	  embedded devices.
 
-	  http://webplatformforembedded.org/
+	  http://wpewebkit.org/
 
 if BR2_PACKAGE_WPEWEBKIT
 
@@ -59,6 +60,7 @@ config BR2_PACKAGE_WPEWEBKIT_BUILD_JSC
 
 config BR2_PACKAGE_WPEWEBKIT_HTTPS
 	bool "HTTPS support"
+	default y
 	depends on !BR2_STATIC_LIBS # gnutls -> libsoup
 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
 	select BR2_PACKAGE_GLIB_NETWORKING
@@ -92,19 +94,22 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
 
 config BR2_PACKAGE_WPEWEBKIT_WEBCRYPTO
 	bool "WebCrypto support"
+	default y
 	select BR2_PACKAGE_LIBTASN1
 	help
-	  Enable support for the WebCrypto API. This will add libtasn1 as
-	  a dependency.
+	  Enable support for the WebCrypto API. This will add libtasn1
+	  as a dependency.
 
 config BR2_PACKAGE_WPEWEBKIT_WEBDRIVER
 	bool "WebDriver support"
+	default y
 	help
 	  Enable support for WebDriver. This will build and install the
 	  WebKitWebDriver program in the target.
 
 config BR2_PACKAGE_WPEWEBKIT_XSLT
 	bool "XSLT support"
+	default y
 	select BR2_PACKAGE_LIBXSLT
 	help
 	  Enable support for XSLT. This adds libxslt2 as a dependecy.

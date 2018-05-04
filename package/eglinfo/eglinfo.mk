@@ -1,3 +1,9 @@
+################################################################################
+#
+# eglinfo
+#
+################################################################################
+
 EGLINFO_VERSION = 5463b8c34f0e3b2977e8a06ed6c9c316ca05c43b
 EGLINFO_SITE = $(call github,KDAB,eglinfo,$(EGLINFO_VERSION))
 EGLINFO_DEPENDENCIES = host-pkgconf libegl
