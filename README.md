@@ -5,6 +5,9 @@ This repository contains documentation, tools, and build recipes to create
 WPE packages for RPi devices, in the form of directory ready to use with
 `BR2_EXTERNAL`.
 
+**This does not work.** It is an abandoned WIP project. If you can figure out
+how to get it to work, that would be cool.
+
 Building
 --------
 
