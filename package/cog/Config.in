@@ -1,0 +1,30 @@
+config BR2_PACKAGE_COG
+	bool "cog"
+	depends on BR2_INSTALL_LIBSTDCPP # wpewebkit
+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # wpewebkit -> icu
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # wpewebkit
+	depends on BR2_TOOLCHAIN_USES_GLIBC # wpewebkit
+	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL # wpewebkit -> libepoxy
+	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS # webkitgtk
+	depends on BR2_PACKAGE_WPEWEBKIT
+	help
+	  WPE launcher and webapp container Edit.
+
+	  https://github.com/Igalia/cog
+
+
+if BR2_PACKAGE_COG
+
+config BR2_PACKAGE_COG_PLATFORM_FDO
+	bool "cog-platform-fdo"
+	depends on BR2_PACKAGE_HAS_LIBEGL # wpebackend-fdo
+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
+	depends on BR2_PACKAGE_WPEBACKEND_FDO
+	help
+	  The FDO Cog platform plug-in allows running under a Wayland
+	  compositor using the WPE FDO backend.
+
+comment "cog-platform-fdo needs wpebackend-fdo"
+	depends on !BR2_PACKAGE_WPEBACKEND_FDO
+
+endif
