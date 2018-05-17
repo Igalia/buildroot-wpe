@@ -1,1 +1,7 @@
-sha512  392ee2d84b9fce53bc350c72fe6a2d73f8165427f197f6d1dd28053a427ddc38e6f33301e71bf5e3abe578bb582b119f242fe5cdd72fa5790ee6f21f386632ab  wpebackend-fdo-0.1-prerelease2.tar.xz
+# From https://wpewebkit.org/releases/wpebackend-fdo-0.1.tar.xz.sums
+md5 481a67db2bac28b4d28a9654b3eb92f2 wpebackend-fdo-0.1.tar.xz
+sha1 3acc830c33db8adf6a5662d9757d23b9af3dba7e wpebackend-fdo-0.1.tar.xz
+sha256 76a95cb7b597618600ac8d69147adf7dd922121acab2725f6ed99ca5b743eaba wpebackend-fdo-0.1.tar.xz
+
+# License checksum
+sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
