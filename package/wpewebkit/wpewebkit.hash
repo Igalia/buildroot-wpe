@@ -1,1 +1,8 @@
-sha512  4fe25a9e1a128c0b03f4d9229de2d904fa7a025b1b214956315c4db40a79857623ac8ea78de3f9c93dd69667d7f3ff617e7d4bf7fc223cf219d0df53475e700b  wpewebkit-0.19.0-prerelease1.tar.xz
+# From https://wpewebkit.org/releases/wpewebkit-2.19.93.tar.xz.sums
+md5 1b8402c49610bb0296a5a480db39359d wpewebkit-2.19.93.tar.xz
+sha1 24006c7024d941fada516346eddeb73ff0f98f80 wpewebkit-2.19.93.tar.xz
+sha256 0ce1e38fdf6a38e52d8611e3310c2a85583c08734a0cc6f8242981dcf3ad012a wpewebkit-2.19.93.tar.xz
+
+# Hashes for license files:
+sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
