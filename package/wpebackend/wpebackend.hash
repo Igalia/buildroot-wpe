@@ -1,1 +1,7 @@
-sha512  dc9860e44045b5aa4c3b15e9b4cca837fe4374327f73c078d0a38618a7fecceca4d1c07df4dca49d6b1be661955df780b497426a718045a0c52e54dc7e04a94f  wpebackend-0.1-prerelease2.tar.xz
+# From https://wpewebkit.org/releases/wpebackend-0.1.tar.xz.sums
+md5 0c4bba4dec2044f087fa119b456a893e wpebackend-0.1.tar.xz
+sha1 29c8583f5ccc7af4a89743e0e7445a468a0473db wpebackend-0.1.tar.xz
+sha256 12261b5819ce64c0eb2b065d9cc2c201c77ddf8bfad31bd8d4e369ce9365ad21 wpebackend-0.1.tar.xz
+
+# License checksum
+sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
