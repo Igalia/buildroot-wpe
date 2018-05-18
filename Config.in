@@ -1,6 +1,5 @@
 # Include all package configuration snippets from the overlay.
 source "$BR2_EXTERNAL_WPE_RPI_PATH/package/cog/Config.in"
-source "$BR2_EXTERNAL_WPE_RPI_PATH/package/dinghy/Config.in"
 source "$BR2_EXTERNAL_WPE_RPI_PATH/package/eglinfo/Config.in"
 source "$BR2_EXTERNAL_WPE_RPI_PATH/package/wpebackend/Config.in"
 source "$BR2_EXTERNAL_WPE_RPI_PATH/package/wpebackend-fdo/Config.in"
