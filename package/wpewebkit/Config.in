@@ -43,7 +43,6 @@ config BR2_PACKAGE_WPEWEBKIT
 	select BR2_PACKAGE_WEBP
 	select BR2_PACKAGE_WEBP_DEMUX
 	select BR2_PACKAGE_WPEBACKEND
-	select BR2_PACKAGE_WPEBACKEND_FDO
 	help
 	  WebKit is an open source, standards compliant web browser
 	  engine. The WPE port is specifically aimed towards usage in
