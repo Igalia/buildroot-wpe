@@ -20,6 +20,7 @@ config BR2_PACKAGE_COG_PLATFORM_FDO
 	depends on BR2_PACKAGE_HAS_LIBEGL # wpebackend-fdo
 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
 	depends on BR2_PACKAGE_WPEBACKEND_FDO
+	default y
 	help
 	  The FDO Cog platform plug-in allows running under a Wayland
 	  compositor using the WPE FDO backend.
