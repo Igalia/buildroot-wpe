@@ -1,0 +1,10 @@
+config BR2_PACKAGE_LIBWPE
+	bool "libwpe"
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on BR2_PACKAGE_HAS_LIBEGL # uses eglplatform.h
+	depends on !BR2_STATIC_LIBS       # uses libdl
+	select BR2_PACKAGE_LIBXKBCOMMON
+	help
+	  Base library for the WPE WebKit port.
+
+	  https://github.com/WebPlatformForEmbedded/libwpe

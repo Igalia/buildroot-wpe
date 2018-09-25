@@ -14,10 +14,8 @@ WPEWEBKIT_LICENSE_FILES = \
 	Source/WebCore/LICENSE-LGPL-2.1
 WPEWEBKIT_DEPENDENCIES = host-cmake host-ruby host-flex host-bison \
 	host-gperf harfbuzz icu jpeg libegl libepoxy libgcrypt libsoup \
-	libxml2 sqlite webp wpebackend
-WPEWEBKIT_CONF_OPTS = \
-	-DPORT=WPE \
-	-DUSE_WOFF2=OFF
+	libxml2 libwpe sqlite webp woff2
+WPEWEBKIT_CONF_OPTS = -DPORT=WPE
 
 # JSC JIT is supported on: i386, x86_64, aarch64 and mips32le target archs.
 # For target arch arm (32) it is only supported on ARMv7 CPUs and ARMv8 CPUs,
