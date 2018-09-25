@@ -1,27 +1,25 @@
-Buildroot overlay for WPE on RPi
+Buildroot overlay for WPE WebKit
 ================================
 
 This repository contains documentation, tools, and build recipes to create
 WPE packages for RPi devices, in the form of directory ready to use with
 `BR2_EXTERNAL`.
 
-**This does not work.** It is an abandoned WIP project. If you can figure out
-how to get it to work, that would be cool.
 
 Building
 --------
 
 Chose the appropriate “defconfig” for the target device (see list of [included
 configurations](#included-configurations) below), and execute the following
-from the top-level source tree directory:
+from the top-level **Buildroot source tree** directory:
 
 ```sh
-make rpi3_wpe_pkg_defconfig
-make
+make BR2_EXTERNAL='path/to/buildroot-wpe' raspberrypi3_wpe_defconfig
+make BR2_EXTERNAL='path/to/buildroot-wpe'
 ```
 
 This will download the needed sources, configure Buildroot, compile WPE, and
-produce store the build results under the `output/` subdirectory.
+store the build results under the `output/` subdirectory.
 
 
 Configuring
@@ -30,7 +28,7 @@ Configuring
 To tune your build configuration use:
 
 ```sh
-make menuconfig
+make BR2_EXTERNAL='…' menuconfig
 ```
 
 Clean builds and config changes
@@ -42,19 +40,23 @@ sould be rebuilt after a build config change or how to do that, then trigger
 a complete new build from a clean state:
 
 ``` sh
-make clean && make
+make BR2_EXTERNAL='…' clean
+make BR2_EXTERNAL='…'
 ```
 
 
 Included Configurations
 -----------------------
 
-- `rpi2_wpe_pkg_defconfig`: Produces an 1GB image file at output/images/sdcard.img
-   for the RPi2 with WPE. The image should be wrote raw to the sdcard, using a tool
-   like ``dd`` or [etcher](https://etcher.io)
-- `rpi3_wpe_pkg_defconfig`: Produces an 1GB image file at output/images/sdcard.img
-   for the RPi3 with WPE. The image should be wrote raw to the sdcard, using a tool
-   like ``dd`` or [etcher](https://etcher.io)
+- `raspberrypi2_wpe_defconfig`: Produces an 1GB image file at
+  `output/images/sdcard.img` for the Raspbrry Pi 2 with WPE. The image
+  should be written to a SD card using a tool like `dd` or
+  [etcher](https://etcher.io).
+
+- `raspberrypi3_wpe_defconfig`: Produces an 1GB image file at
+  `output/images/sdcard.img` for the Raspberry Pi 3 with WPE. The image
+  should be wrote raw to the sdcard, using a tool like `dd` or
+  [etcher](https://etcher.io)
 
 
 Documentation
