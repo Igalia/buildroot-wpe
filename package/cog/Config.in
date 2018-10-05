@@ -1,6 +1,5 @@
 config BR2_PACKAGE_COG
 	bool "cog"
-	depends on BR2_PACKAGE_LIBWPE
 	depends on BR2_PACKAGE_WPEWEBKIT
 	help
 	  Single “window” launcher for the WebKit WPE port, and helper
@@ -14,7 +13,7 @@ config BR2_PACKAGE_COG_PLATFORM_FDO_ARCH_SUPPORTS
 	bool
 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
 	depends on BR2_PACKAGE_HAS_LIBGLES
-	depends on BR2_PACKAGE_WAYLAND
+	depends on BR2_PACKAGE_WPEBACKEND_FDO
 	default y
 
 comment "cog fdo platform plugin requires egl, gles, wayland"
@@ -23,7 +22,6 @@ comment "cog fdo platform plugin requires egl, gles, wayland"
 config BR2_PACKAGE_COG_PLATFORM_FDO
 	bool "fdo platform"
 	depends on BR2_PACKAGE_COG_PLATFORM_FDO_ARCH_SUPPORTS
-	select BR2_PACKAGE_WPEBACKEND_FDO
 	help
 	  Support platform plug-in which uses FreeDesktop.Org's
 	  technologies for windowing. Choose this to support output
