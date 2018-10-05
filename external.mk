@@ -1,1 +1,1 @@
-include $(sort $(wildcard $(BR2_EXTERNAL_WPE_RPI_PATH)/package/*/*.mk))
+include $(sort $(wildcard $(BR2_EXTERNAL_WPE_PATH)/package/*/*.mk))

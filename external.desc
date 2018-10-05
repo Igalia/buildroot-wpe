@@ -1,2 +1,2 @@
-name: WPE_RPI
-desc: WPE Buildroot overlay for RPi
+name: WPE
+desc: WPE Buildroot overlay
