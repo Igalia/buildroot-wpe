@@ -1,1 +1,4 @@
-sha512  4fe25a9e1a128c0b03f4d9229de2d904fa7a025b1b214956315c4db40a79857623ac8ea78de3f9c93dd69667d7f3ff617e7d4bf7fc223cf219d0df53475e700b  wpewebkit-0.19.0-prerelease1.tar.xz
+# From https://wpewebkit.org/releases/wpewebkit-2.22.0.tar.xz.sums
+md5 e23753c1b2984303e2523c18031b0736 wpewebkit-2.22.0.tar.xz
+sha1 c69998d2a522287f5c894f8ed73b9f122d3ae949 wpewebkit-2.22.0.tar.xz
+sha256 625551aa60ad047639cc64be4259f03598c4ed5db5f7427251657f889e822208 wpewebkit-2.22.0.tar.xz
