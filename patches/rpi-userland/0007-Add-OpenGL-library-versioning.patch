@@ -1,0 +1,11 @@
+--- a/interface/khronos/CMakeLists.txt	2018-10-09 19:42:05.740076854 +0530
++++ b/interface/khronos/CMakeLists.txt	2018-10-09 19:42:36.070478018 +0530
+@@ -100,4 +100,8 @@
+ target_link_libraries(brcmWFC brcmEGL)
+ target_link_libraries(brcmOpenVG brcmEGL)
+ 
++set(DESTDIR \$ENV{DESTDIR})
++include(GNUInstallDirs)
++install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink libEGL.so ${DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libEGL.so.1)")
++install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink libGLESv2.so ${DESTDIR}/${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libGLESv2.so.2)")
+ install(TARGETS brcmEGL brcmGLESv2 brcmOpenVG brcmWFC DESTINATION lib)

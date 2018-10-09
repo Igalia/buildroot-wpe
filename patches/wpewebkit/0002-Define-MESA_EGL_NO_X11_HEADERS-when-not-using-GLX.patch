@@ -1,0 +1,13 @@
+--- a/Tools/wpe/backends/ViewBackend.cpp	2018-10-04 10:04:52.264448058 +0000
++++ b/Tools/wpe/backends/ViewBackend.cpp	2018-10-04 10:06:02.232680294 +0000
+@@ -25,6 +25,10 @@
+ 
+ #include "ViewBackend.h"
+ 
++#if !defined(USE_GLX) || !USE_GLX
++// This define is used in mesa and other GL implementations to exlcude X11 headers.
++#define MESA_EGL_NO_X11_HEADERS 1
++#endif
+ #include <epoxy/egl.h>
+ #include <glib.h>
+ #include <wpe/fdo-egl.h>

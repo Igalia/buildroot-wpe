@@ -1,0 +1,125 @@
+--- a/Tools/CMakeLists.txt	2018-09-28 11:02:12.003870127 +0000
++++ b/Tools/CMakeLists.txt	2018-09-28 11:03:02.836038576 +0000
+@@ -22,7 +22,9 @@
+ elseif ("${PORT}" STREQUAL "JSCOnly")
+ elseif ("${PORT}" STREQUAL "WPE")
+     if (DEVELOPER_MODE OR ENABLE_MINIBROWSER)
+-        add_subdirectory(wpe/backends)
++	if(USE_WPEBACKEND_FDO)
++	    add_subdirectory(wpe/backends)
++        endif ()
+     endif ()
+
+     if (DEVELOPER_MODE)
+--- a/Source/cmake/OptionsWPE.cmake	2018-09-28 10:59:02.287241812 +0000
++++ b/Source/cmake/OptionsWPE.cmake	2018-09-28 11:01:18.299692203 +0000
+@@ -50,6 +50,8 @@
+ 
+ # Private options specific to the WPE port.
+ WEBKIT_OPTION_DEFINE(USE_OPENVR "Whether to use OpenVR as WebVR backend." PRIVATE ${ENABLE_EXPERIMENTAL_FEATURES})
++WEBKIT_OPTION_DEFINE(USE_WPEBACKEND_RDK "Whether to use RDK as WPE backend." PRIVATE OFF)
++WEBKIT_OPTION_DEFINE(USE_WPEBACKEND_FDO "Whether to use FDO as WPE backend." PRIVATE OFF)
+
+ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+     WEBKIT_OPTION_DEFAULT_PORT_VALUE(ENABLE_MEMORY_SAMPLER PRIVATE ON)
+--- a/Tools/MiniBrowser/wpe/main.cpp	2018-09-28 11:25:57.853425542 +0000
++++ b/Tools/MiniBrowser/wpe/main.cpp	2018-09-28 11:30:15.114413173 +0000
+@@ -25,8 +25,10 @@
+
+ #include "cmakeconfig.h"
+ 
++#if defined(USE_WPEBACKEND_FDO) && USE_WPEBACKEND_FDO
+ #include "HeadlessViewBackend.h"
+ #include "WindowViewBackend.h"
++#endif
+ #include <gst/gst.h>
+ #include <memory>
+ #include <wpe/webkit.h>
+@@ -55,6 +57,7 @@
+     { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
+ };
+ 
++#if defined(USE_WPEBACKEND_FDO) && USE_WPEBACKEND_FDO
+ class InputClient final : public WPEToolingBackends::ViewBackend::InputClient {
+ public:
+     InputClient(GMainLoop* loop)
+@@ -75,6 +78,7 @@
+ private:
+     GMainLoop* m_loop { nullptr };
+ };
++#endif
+ 
+ static WebKitWebView* createWebViewForAutomationCallback(WebKitAutomationSession*, WebKitWebView* view)
+ {
+@@ -92,12 +96,14 @@
+     g_signal_connect(session, "create-web-view", G_CALLBACK(createWebViewForAutomationCallback), view);
+ }
+ 
++#if defined(USE_WPEBACKEND_FDO) && USE_WPEBACKEND_FDO
+ static std::unique_ptr<WPEToolingBackends::ViewBackend> createViewBackend(uint32_t width, uint32_t height)
+ {
+     if (headlessMode)
+         return std::make_unique<WPEToolingBackends::HeadlessViewBackend>(width, height);
+     return std::make_unique<WPEToolingBackends::WindowViewBackend>(width, height);
+ }
++#endif
+ 
+ int main(int argc, char *argv[])
+ {
+@@ -121,6 +127,7 @@
+ 
+     auto* loop = g_main_loop_new(nullptr, FALSE);
+ 
++#if defined(USE_WPEBACKEND_FDO) && USE_WPEBACKEND_FDO
+     auto backend = createViewBackend(1280, 720);
+     struct wpe_view_backend* wpeBackend = backend->backend();
+     if (!wpeBackend) {
+@@ -134,6 +141,10 @@
+     auto* viewBackend = webkit_web_view_backend_new(wpeBackend, [](gpointer data) {
+         delete static_cast<WPEToolingBackends::ViewBackend*>(data);
+     }, backend.release());
++#else /* RDK backend*/
++    struct wpe_view_backend* wpeBackend = wpe_view_backend_create();
++    auto* viewBackend = webkit_web_view_backend_new(wpeBackend, NULL, NULL);
++#endif
+ 
+     auto* webContext = (privateMode || automationMode) ? webkit_web_context_new_ephemeral() : webkit_web_context_get_default();
+ 
+--- a/Tools/MiniBrowser/wpe/CMakeLists.txt	2018-10-02 04:45:40.701796028 +0000
++++ b/Tools/MiniBrowser/wpe/CMakeLists.txt	2018-10-02 04:52:00.843139131 +0000
+@@ -8,22 +8,31 @@
+     ${TOOLS_DIR}/wpe/backends/
+     ${DERIVED_SOURCES_WPE_API_DIR}
+     ${FORWARDING_HEADERS_WPE_DIR}
+-    ${CMAKE_BINARY_DIR}/DerivedSources/WPEToolingBackends
+ )
+ 
+ set(MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES
+     ${WPE_INCLUDE_DIRS}
+-    ${WPEBACKEND_FDO_INCLUDE_DIRS}
+ )
+ 
+ set(MiniBrowser_LIBRARIES
+     ${JavaScriptCore_LIBRARY_NAME}
+-    WPEToolingBackends
+     WebKit
+     ${WPE_LIBRARIES}
+-    ${WPEBACKEND_FDO_LIBRARIES}
+ )
+ 
++if(USE_WPEBACKEND_FDO)
++    list(APPEND MiniBrowser_INCLUDE_DIRECTORIES
++	${CMAKE_BINARY_DIR}/DerivedSources/WPEToolingBackends
++    )
++    list(APPEND MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES
++	${WPEBACKEND_FDO_INCLUDE_DIRS}
++    )
++    list(APPEND MiniBrowser_LIBRARIES
++	WPEToolingBackends
++	${WPEBACKEND_FDO_LIBRARIES}
++    )
++endif ()
++
+ if (DEVELOPER_MODE)
+     add_definitions(-DWEBKIT_INJECTED_BUNDLE_PATH="${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+ endif ()
