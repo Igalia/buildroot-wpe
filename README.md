@@ -14,7 +14,7 @@ configurations](#included-configurations) below), and execute the following
 from the top-level **Buildroot source tree** directory:
 
 ```sh
-make BR2_EXTERNAL='path/to/buildroot-wpe' raspberrypi3_wpe_defconfig
+make BR2_EXTERNAL='path/to/buildroot-wpe' raspberrypi3_wpe_rdk_defconfig
 make BR2_EXTERNAL='path/to/buildroot-wpe'
 ```
 
@@ -58,6 +58,10 @@ Included Configurations
   should be wrote raw to the sdcard, using a tool like `dd` or
   [etcher](https://etcher.io)
 
+- `raspberrypi3_wpe_rdk_defconfig`: Produces an 512MB image file at
+  `output/images/sdcard.img` for the Raspberry Pi 3 with WPE woth WpeBackend-RDK and RPI-UserLand. The image
+  should be wrote raw to the sdcard, using a tool like `dd` or
+  [etcher](https://etcher.io)
 
 Documentation
 -------------
