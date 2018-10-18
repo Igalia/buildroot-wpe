@@ -2,19 +2,19 @@ config BR2_PACKAGE_COG
 	bool "cog"
 	depends on BR2_PACKAGE_WPEWEBKIT
 	help
-	  Single “window” launcher for the WebKit WPE port, and helper
-	  library for implementing WPE launcher. It does not provide
-	  any chrome, and is suitable to be used as a Web application
-	  container.
+	  Single “window” launcher for the WebKit WPE port, and
+	  helper library for implementing WPE launcher. It does
+	  not provide any chrome, and is suitable to be used
+	  as a Web application container.
 
 if BR2_PACKAGE_COG
 
 config BR2_PACKAGE_COG_PLATFORM_FDO_ARCH_SUPPORTS
 	bool
+	default y
 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
 	depends on BR2_PACKAGE_HAS_LIBGLES
 	depends on BR2_PACKAGE_WPEBACKEND_FDO
-	default y
 
 comment "cog fdo platform plugin requires egl, gles, wayland"
 	depends on !BR2_PACKAGE_COG_PLATFORM_FDO_ARCH_SUPPORTS
