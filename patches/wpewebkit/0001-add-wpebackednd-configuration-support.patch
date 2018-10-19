@@ -1,0 +1,127 @@
+--- a/Source/cmake/OptionsWPE.cmake	2018-10-02 18:15:10.000000000 +0530
++++ b/Source/cmake/OptionsWPE.cmake	2018-10-17 23:49:43.110473501 +0530
+@@ -50,6 +50,8 @@
+
+ # Private options specific to the WPE port.
+ WEBKIT_OPTION_DEFINE(USE_OPENVR "Whether to use OpenVR as WebVR backend." PRIVATE ${ENABLE_EXPERIMENTAL_FEATURES})
++WEBKIT_OPTION_DEFINE(USE_MINIBROWSER_BACKEND_DEFAULT "Whether to use default WPE backend for MiniBrowser." PRIVATE OFF)
++WEBKIT_OPTION_DEFINE(USE_MINIBROWSER_BACKEND_FDO "Whether to use FDO backend for MiniBrowser." PRIVATE OFF)
+
+ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+     WEBKIT_OPTION_DEFAULT_PORT_VALUE(ENABLE_MEMORY_SAMPLER PRIVATE ON)
+--- a/Tools/CMakeLists.txt	2018-09-25 14:32:48.000000000 +0530
++++ b/Tools/CMakeLists.txt	2018-10-17 23:58:32.731296872 +0530
+@@ -22,7 +22,9 @@
+ elseif ("${PORT}" STREQUAL "JSCOnly")
+ elseif ("${PORT}" STREQUAL "WPE")
+     if (DEVELOPER_MODE OR ENABLE_MINIBROWSER)
+-        add_subdirectory(wpe/backends)
++        if (USE_MINIBROWSER_BACKEND_FDO)
++            add_subdirectory(wpe/backends)
++        endif ()
+     endif ()
+
+     if (DEVELOPER_MODE)
+--- a/Tools/MiniBrowser/wpe/CMakeLists.txt	2018-07-25 17:26:32.000000000 +0530
++++ b/Tools/MiniBrowser/wpe/CMakeLists.txt	2018-10-17 23:52:04.457097209 +0530
+@@ -8,22 +8,31 @@
+     ${TOOLS_DIR}/wpe/backends/
+     ${DERIVED_SOURCES_WPE_API_DIR}
+     ${FORWARDING_HEADERS_WPE_DIR}
+-    ${CMAKE_BINARY_DIR}/DerivedSources/WPEToolingBackends
+ )
+
+ set(MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES
+     ${WPE_INCLUDE_DIRS}
+-    ${WPEBACKEND_FDO_INCLUDE_DIRS}
+ )
+
+ set(MiniBrowser_LIBRARIES
+     ${JavaScriptCore_LIBRARY_NAME}
+-    WPEToolingBackends
+     WebKit
+     ${WPE_LIBRARIES}
+-    ${WPEBACKEND_FDO_LIBRARIES}
+ )
+
++if(USE_MINIBROWSER_BACKEND_FDO)
++    list(APPEND MiniBrowser_INCLUDE_DIRECTORIES
++	${CMAKE_BINARY_DIR}/DerivedSources/WPEToolingBackends
++    )
++    list(APPEND MiniBrowser_SYSTEM_INCLUDE_DIRECTORIES
++	${WPEBACKEND_FDO_INCLUDE_DIRS}
++    )
++    list(APPEND MiniBrowser_LIBRARIES
++	WPEToolingBackends
++	${WPEBACKEND_FDO_LIBRARIES}
++    )
++endif ()
++
+ if (DEVELOPER_MODE)
+     add_definitions(-DWEBKIT_INJECTED_BUNDLE_PATH="${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+ endif ()
+--- a/Tools/MiniBrowser/wpe/main.cpp	2018-10-18 00:19:15.355605738 +0530
++++ b/Tools/MiniBrowser/wpe/main.cpp	2018-10-18 00:18:53.211695352 +0530
+@@ -24,9 +24,12 @@
+  */
+
+ #include "cmakeconfig.h"
++#include <wtf/Platform.h>
+
++#if USE(MINIBROWSER_BACKEND_FDO)
+ #include "HeadlessViewBackend.h"
+ #include "WindowViewBackend.h"
++#endif
+ #include <gst/gst.h>
+ #include <memory>
+ #include <wpe/webkit.h>
+@@ -55,6 +58,7 @@
+     { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
+ };
+
++#if USE(MINIBROWSER_BACKEND_FDO)
+ class InputClient final : public WPEToolingBackends::ViewBackend::InputClient {
+ public:
+     InputClient(GMainLoop* loop)
+@@ -75,6 +79,7 @@
+ private:
+     GMainLoop* m_loop { nullptr };
+ };
++#endif
+
+ static WebKitWebView* createWebViewForAutomationCallback(WebKitAutomationSession*, WebKitWebView* view)
+ {
+@@ -92,12 +97,14 @@
+     g_signal_connect(session, "create-web-view", G_CALLBACK(createWebViewForAutomationCallback), view);
+ }
+
++#if USE(MINIBROWSER_BACKEND_FDO)
+ static std::unique_ptr<WPEToolingBackends::ViewBackend> createViewBackend(uint32_t width, uint32_t height)
+ {
+     if (headlessMode)
+         return std::make_unique<WPEToolingBackends::HeadlessViewBackend>(width, height);
+     return std::make_unique<WPEToolingBackends::WindowViewBackend>(width, height);
+ }
++#endif
+
+ int main(int argc, char *argv[])
+ {
+@@ -121,6 +128,7 @@
+ 
+     auto* loop = g_main_loop_new(nullptr, FALSE);
+
++#if USE(MINIBROWSER_BACKEND_FDO)
+     auto backend = createViewBackend(1280, 720);
+     struct wpe_view_backend* wpeBackend = backend->backend();
+     if (!wpeBackend) {
+@@ -134,6 +142,10 @@
+     auto* viewBackend = webkit_web_view_backend_new(wpeBackend, [](gpointer data) {
+         delete static_cast<WPEToolingBackends::ViewBackend*>(data);
+     }, backend.release());
++#else
++    struct wpe_view_backend* wpeBackend = wpe_view_backend_create();
++    auto* viewBackend = webkit_web_view_backend_new(wpeBackend, NULL, NULL);
++#endif
+
+     auto* webContext = (privateMode || automationMode) ? webkit_web_context_new_ephemeral() : webkit_web_context_get_default();
+ 

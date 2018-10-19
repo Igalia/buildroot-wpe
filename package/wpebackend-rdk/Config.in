@@ -1,0 +1,10 @@
+config BR2_PACKAGE_WPEBACKEND_RDK
+	bool "wpebackend-rdk"
+	select BR2_PACKAGE_LIBWPE
+	select BR2_PACKAGE_XKEYBOARD_CONFIG if BR2_PACKAGE_LIBXKBCOMMON
+	select BR2_PACKAGE_LIBINPUT
+	help
+	  The RDK backend supports a number of different hardware
+	  devices. Currently the Raspberry Pi is the only one
+	  supported (using rpi-userland) without using proprietary
+	  blobs.

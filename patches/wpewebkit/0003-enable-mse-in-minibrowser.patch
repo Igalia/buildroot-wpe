@@ -1,0 +1,10 @@
+--- a/Tools/MiniBrowser/wpe/main.cpp	2018-10-09 17:01:38.086484724 +0530
++++ b/Tools/MiniBrowser/wpe/main.cpp	2018-10-09 17:02:07.492296995 +0530
+@@ -177,6 +177,7 @@
+         "enable-developer-extras", TRUE,
+         "enable-webgl", TRUE,
+         "enable-media-stream", TRUE,
++        "enable-mediasource", TRUE,
+         nullptr);
+ 
+     auto* webView = WEBKIT_WEB_VIEW(g_object_new(WEBKIT_TYPE_WEB_VIEW,
