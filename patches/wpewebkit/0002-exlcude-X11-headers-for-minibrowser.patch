@@ -1,0 +1,10 @@
+--- a/Tools/wpe/backends/ViewBackend.cpp	2018-10-14 21:09:41.463458367 +0530
++++ b/Tools/wpe/backends/ViewBackend.cpp	2018-10-14 21:09:32.624058913 +0530
+@@ -25,6 +25,7 @@
+
+ #include "ViewBackend.h"
+
++#include <wayland-egl.h>
+ #include <epoxy/egl.h>
+ #include <glib.h>
+ #include <wpe/fdo-egl.h>
